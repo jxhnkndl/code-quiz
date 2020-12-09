@@ -22,16 +22,11 @@
 <body>
   
   <!-- Navbar -->
-  <nav class="navbar navbar-expand-lg navbar-dark bg-primary py-4">
-    <div class="container">
-      <!-- Header Text -->
-      <h1 class="text-light font-weight-bold mb-0">CODE QUIZ!</h1>
-      <!-- Timer -->
-      <div class="timer-container">
-        <p class="text-light mb-0">Time Remaining: 
-          <span class="timer bg-light text-primary p-1 ml-1">00:00</span> 
-        </p>
-      </div>
+  <nav class="navbar navbar-dark bg-primary py-4">
+    <div class="timer-container mx-auto">
+      <p class="text-light mb-0">Time Remaining: 
+        <span class="timer bg-light text-primary p-1 ml-1">00:00</span> 
+      </p>
     </div>
   </nav>
 
@@ -65,12 +60,18 @@
                 Booleans
               </button>
             </div>
-      
           </div>
         </div>
       </div>
     </section>
   </main>
+
+  <footer class="fixed-bottom bg-secondary text-center p-4">
+    <h4 class="mb-0">
+      Current High Score: 
+      <span id="high-score" class="high-score bg-primary text-light px-1">10/10 by JKR</span>
+    </h4>    
+  </footer>
 
   <!-- Bootstrap Scripts -->
   <!-- jQuery -->
