@@ -1,0 +1,9 @@
+/* Background Image */
+
+body {
+  /* BG Image by Markus Spiske via Unsplash.com */
+  background-image: url(../img/bg-code.jpg);
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
