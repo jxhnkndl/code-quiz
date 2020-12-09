@@ -3,7 +3,8 @@
 body {
   /* BG Image by Markus Spiske via Unsplash.com */
   background-image: url(../img/bg-code.jpg);
-  background-position: center;
+  background-position: top;
+  background-size: cover;
   background-repeat: no-repeat;
 }
 
