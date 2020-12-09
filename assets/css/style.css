@@ -8,3 +8,8 @@ body {
   background-repeat: no-repeat;
 }
 
+/* Bottom gutter to prevent sticky footer overlap */
+
+main {
+  margin-bottom: 50px;
+}
