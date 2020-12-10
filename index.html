@@ -33,7 +33,7 @@
         <div class="jumbotron p-4 m-0">
 
           <!-- Section: Page Header / Quiz Setup -->
-          <!-- <section class="d-block text-center">
+          <section id="intro-section" class="d-block text-center">
             <h1 class="display-3 font-weight-bold">Code Quiz!</h1>
             <p class="lead">Ready to test your knowledge of JavaScript?</p>
             <hr class="my-4">
@@ -42,12 +42,12 @@
             <p class="mb-0">Miss a Question?</p>
             <p>5 Second Penalty!</p>
             <p class="lead">
-              <a class="btn btn-primary btn-lg px-4 mt-3" role="button">Let's Do This!</a>
+              <a id="start-quiz" class="btn btn-primary btn-lg px-4 mt-3" role="button">Let's Do This!</a>
             </p>
-          </section> -->
+          </section>
 
           <!-- Quiz Question -->
-          <section class="d-block">
+          <section id="quiz-section" class="d-none">
             <!-- Timer -->
             <div class="timer">
               <p class="text-center text-primary font-weight-bold">
@@ -83,6 +83,11 @@
                 <span class="timer text-light bg-primary p-1">00</span>
               </p>
             </div>
+            <div class="temporary">
+              <button id="back-btn" class="btn btn-primary btn-block btn-lg">
+                Back to Start
+              </button>
+            </div>
           </section>
 
         </div>
@@ -109,5 +114,7 @@
     integrity="sha384-w1Q4orYjBQndcko6MimVbzY0tgp4pWB4lZ7lr30WKz0vr/aWKhXdBNmNb5D92v7s" 
     crossorigin="anonymous">
   </script>
+  <!-- Custom Script -->
+  <script src="index.js"></script>
 </body>
 </html>
