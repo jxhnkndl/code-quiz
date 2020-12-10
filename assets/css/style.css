@@ -1,3 +1,9 @@
-.content {
+.content-container {
   height: 100vh;
+}
+
+.content-box {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
