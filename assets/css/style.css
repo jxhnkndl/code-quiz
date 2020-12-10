@@ -1,15 +1,19 @@
 
 /* Background Image */
-
-body {
+/* 
+body { */
   /* BG Image by Markus Spiske via Unsplash.com */
-  background-image: url(../img/bg-code.jpg);
+  /* background-image: url(../img/bg-code.jpg);
   background-position: center;
-  background-repeat: no-repeat;
-}
+  background-repeat: no-repeat; */
+/* } */
 
 /* Bottom gutter to prevent sticky footer overlap */
 
-main {
+/* main {
   margin-bottom: 50px;
+} */
+
+.content {
+  height: 100vh;
 }
