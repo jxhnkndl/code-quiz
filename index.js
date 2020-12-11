@@ -52,8 +52,9 @@ var quizData = [
 ]
 
 // UI Vars
-var intrustionsPageEl = document.getElementById("instructions-section");
+var intrucstionsPageEl = document.getElementById("instructions-section");
 var quizPageEl = document.getElementById("quiz-section");
+var scorePageEl = document.getElementById("high-score");
 var answersEl = document.getElementById("answer-container");
 var questionEl = document.getElementById("question");
 var scoreEl = document.getElementById("score");
@@ -94,12 +95,43 @@ function renderQuestion(quizData) {
 function takeQuiz() {
 
   // Toggle from instructions page to quiz page
-  intrustionsPageEl.classList.replace("d-block", "d-none");
+  intrucstionsPageEl.classList.replace("d-block", "d-none");
   quizPageEl.classList.replace("d-none", "d-block");
 
   // Render first quiz question into the UI
   renderQuestion(quizData);
 }
 
+// End Quiz
+function quizOver() {
+
+  // Toggle from quiz page to leaderboard page
+  quizPageEl.classList.replace("d-block", "d-none");
+  scorePageEl.classList.replace("d-none", "d-block");
+
+}
+
 // Event Listener: Start Quiz Button
 startBtnEl.addEventListener("click", takeQuiz);
+
+// Event Listener: Any Answer Button
+answersEl.addEventListener("click", function(e) {
+
+  // Check that an answer button is clicked
+  if (e.target.classList.contains("answer")) {
+
+    // Check that there are questions left to load
+    if (currentQuestion < quizData.length - 1) {
+
+      // Increment current question iterator
+      currentQuestion++;
+
+      // Render the next question
+      renderQuestion(quizData);
+    } else {
+
+      // End quiz
+      quizOver();
+    }
+  }
+});
