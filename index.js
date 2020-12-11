@@ -57,3 +57,26 @@ var questionEl = document.getElementById("question");
 var scoreEl = document.getElementById("score");
 var timerEl = document.getElementById("timer");
 var startBtnEl = document.getElementById("start-btn");
+
+// Global Vars
+var currentQuestion = 0;
+
+// Render UI
+function renderQuestion(quizData) {
+
+  var question = quizData[currentQuestion].question;
+  var answers = quizData[currentQuestion].answers;
+  var output = "";
+
+  questionEl.textContent = question;
+
+  answers.forEach(function(answer, index) {
+    output += `
+      <button id="${index}" class="btn btn-outline-primary btn-block btn-lg">
+        ${answer}
+      </button>
+    `;
+  });
+  
+  answersEl.innerHTML = output;
+}
