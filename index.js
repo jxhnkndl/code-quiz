@@ -1,22 +1,59 @@
+// Quiz Question Data
+var quizData = [
+  {
+    question: "Which of the following is not a valid data type in JavaScript?",
+    answers: [
+      "Numbers",
+      "Booleans",
+      "Variables",
+      "Strings"
+    ],
+    correctIndex: 2
+  }, 
+  {
+    question: "What is the correct term for a discrete, reusable block of code designed to accomplish a specific task?",
+    answers: [
+      "Conditional",
+      "Function",
+      "Prompt",
+      "Event"
+    ],
+    correctIndex: 1
+  },
+  {
+    question: "Which of the following could best be described as an indexed collection of elements?",
+    answers: [
+      "List",
+      "Batch",
+      "Object",
+      "Array"
+    ],
+    correctIndex: 3
+  },
+  {
+    question: "Which of the following is not a valid type JavaScript event?",
+    answers: [
+      "swipe",
+      "click",
+      "submit",
+      "keyup"
+    ],
+    correctIndex: 0
+  },
+  {
+    question: "What is the object that allows JavaScript to access, interact with, and manipulate elements in an HTML document in the browser?",
+    answers: [
+      "Node.js",
+      "DOM",
+      "querySelector",
+      "jQuery"
+    ]
+  }
+]
+
 // UI Vars
-var startPage = document.querySelector('#intro-section');
-var quizPage = document.querySelector('#quiz-section');
-var startBtn = document.querySelector('#start-quiz');
-var backBtn = document.querySelector('#back-btn');
-
-
-// Page Transition Test
-startBtn.addEventListener("click", function(e) {
-  startPage.classList.remove("d-block")
-  startPage.classList.add("d-none");
-  quizPage.classList.remove("d-none");
-  quizPage.classList.add("d-block");
-});
-
-// Page Transition Test
-backBtn.addEventListener("click", function(e) {
-  quizPage.classList.remove("d-block");
-  quizPage.classList.add("d-none");
-  startPage.classList.remove("d-none")
-  startPage.classList.add("d-block");
-});
+var answersEl = document.getElementById("answer-container");
+var questionEl = document.getElementById("question");
+var scoreEl = document.getElementById("score");
+var timerEl = document.getElementById("timer");
+var startBtnEl = document.getElementById("start-btn");
