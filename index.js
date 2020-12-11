@@ -81,7 +81,7 @@ function renderQuestion(quizData) {
   // Loop through answers and create an answer button for each
   answers.forEach(function(answer, index) {
     output += `
-      <button id="${index}" class="btn btn-outline-primary btn-block btn-lg answer">
+      <button id="${index}" class="btn btn-primary btn-block btn-lg answer">
         ${answer}
       </button>
     `;
