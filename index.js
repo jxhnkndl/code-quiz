@@ -51,21 +51,29 @@ var quizData = [
   }
 ]
 
+
 // UI Vars
-var intrucstionsPageEl = document.getElementById("instructions-section");
+var landingPageEl = document.getElementById("landing-section");
 var quizPageEl = document.getElementById("quiz-section");
 var scorePageEl = document.getElementById("high-score");
+var leaderboardEl = document.getElementById("leaderboard");
 var answersEl = document.getElementById("answer-container");
 var questionEl = document.getElementById("question");
 var scoreEl = document.getElementById("score");
 var timerEl = document.getElementById("timer");
+var formEl = document.getElementById("form");
 var startBtnEl = document.getElementById("start-quiz");
+var scoreBtnEl = document.getElementById("post-score");
+var restartBtnEl = document.getElementById("restart-btn");
+var clearBtnEl = document.getElementById("clear-btn");
+
 
 // Global Vars
 var currentQuestion = 0;
 var seconds = 60;
 
-// Render UI
+
+// Render Question in UI
 function renderQuestion(quizData) {
 
   // Get current question and answer array from quiz data
@@ -91,30 +99,58 @@ function renderQuestion(quizData) {
   answersEl.innerHTML = output;
 }
 
+
 // Start Quiz
 function takeQuiz() {
 
   // Toggle from instructions page to quiz page
-  intrucstionsPageEl.classList.replace("d-block", "d-none");
-  quizPageEl.classList.replace("d-none", "d-block");
+  toggleSection(landingPageEl, quizPageEl);
 
   // Render first quiz question into the UI
   renderQuestion(quizData);
 }
 
+
 // End Quiz
 function quizOver() {
 
   // Toggle from quiz page to leaderboard page
-  quizPageEl.classList.replace("d-block", "d-none");
-  scorePageEl.classList.replace("d-none", "d-block");
+  toggleSection(quizPageEl, scorePageEl);
+}
+
+// Post Score
+function postScore() {
+
+  // Toggle internal section from form to leaderboard
+  toggleSection(formEl, leaderboardEl);
 
 }
+
+
+// Restart Quiz
+function restartQuiz() {
+
+  // Toggle from score page back to landing page
+  toggleSection(scorePageEl, landingPageEl);
+
+  // Reset Current Question
+  currentQuestion = 0;
+
+}
+
+
+// Toggle Sections
+function toggleSection(prev, next) {
+  prev.classList.replace("d-block", "d-none");
+  next.classList.replace("d-none", "d-block");
+}
+
 
 // Event Listener: Start Quiz Button
 startBtnEl.addEventListener("click", takeQuiz);
 
-// Event Listener: Any Answer Button
+
+// Event Listener: Answer Buttons
 answersEl.addEventListener("click", function(e) {
 
   // Check that an answer button is clicked
@@ -135,3 +171,19 @@ answersEl.addEventListener("click", function(e) {
     }
   }
 });
+
+
+// Event Listener: Add High Score to Leaderboard
+scoreBtnEl.addEventListener("click", function(e) {
+
+  // Prevent default submit behavior
+  e.preventDefault();
+
+  // Post score to leaderboard
+  postScore();
+
+});
+
+
+// Event Listener: Restart
+restartBtnEl.addEventListener("click", restartQuiz);
