@@ -5,6 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Test Your JavaScript | Code Quiz</title>
 
+  <!-- Favicon: Prevent 404 error in the console -->
+  <link rel="icon" href="data:;base64,iVBORw0KGgo=">
+
   <!-- Font Awesome -->
   <link 
     rel="stylesheet" 
@@ -21,76 +24,72 @@
 </head>
 <body class="bg-primary">
   
-  <!-- Main Page Container -->
-  <main class="">
+  <!-- Main Page Content -->
+  <main>
 
     <!-- Flexbox Container -->
     <div class="container d-flex justify-content-center align-items-center content">
-      <!-- Flexbox Page Centered Container -->
-      <div class="container p-0 bg-light rounded">
+      <!-- Centered Content Container -->
+      <div class="container p-4 bg-light rounded">
 
-        <!-- Jumbotron: Primary Content Container -->
-        <div class="jumbotron p-4 m-0">
+        <!-- Section: Page Header / Quiz Setup -->
+        <section id="intro-section" class="d-block text-center">
+          <h1 class="display-3 font-weight-bold">Code Quiz!</h1>
+          <p class="lead">Ready to test your knowledge of JavaScript?</p>
+          <hr class="w-75 my-4">
+          <p class="mb-0">5 Questions</p>
+          <p class="mb-0">60 Seconds</p>
+          <p class="mb-0">Miss a Question?</p>
+          <p>5 Second Penalty!</p>
+          <p class="lead">
+            <a id="start-quiz" class="btn btn-primary btn-lg px-4 mt-3" role="button">Let's Do This!</a>
+          </p>
+        </section>
 
-          <!-- Section: Page Header / Quiz Setup -->
-          <section id="intro-section" class="d-block text-center">
-            <h1 class="display-3 font-weight-bold">Code Quiz!</h1>
-            <p class="lead">Ready to test your knowledge of JavaScript?</p>
-            <hr class="my-4">
-            <p class="mb-0">5 Questions</p>
-            <p class="mb-0">60 Seconds</p>
-            <p class="mb-0">Miss a Question?</p>
-            <p>5 Second Penalty!</p>
-            <p class="lead">
-              <a id="start-quiz" class="btn btn-primary btn-lg px-4 mt-3" role="button">Let's Do This!</a>
+        <!-- Quiz Question: Display toggled by the Start Quiz button -->
+        <section id="quiz-section" class="d-none">
+          <!-- Timer -->
+          <div class="timer">
+            <p class="text-center text-primary font-weight-bold">
+              Time Remaining: 
+              <span class="timer text-light bg-primary p-1">00</span>
             </p>
-          </section>
+          </div>
+          <!-- Question -->
+          <h3 id="question" class="text-center font-weight-bold">
+            Which of the following is not a valid data type used in JavaScript?
+          </h3>
+          <hr class="my-4">
+          <!-- Answer Choices -->
+          <div id="answer-container" class="text-center">
+            <button id="0" class="btn btn-outline-primary btn-block btn-lg">
+              Numbers
+            </button>
+            <button id="1" class="btn btn-outline-primary btn-block btn-lg">
+              Variables
+            </button>
+            <button id="2" class="btn btn-outline-primary btn-block btn-lg">
+              Booleans
+            </button>
+            <button id="3" class="btn btn-outline-primary btn-block btn-lg">
+              Strings
+            </button>
+          </div>
+          <hr class="my-4">
+          <!-- Score -->
+          <div class="timer">
+            <p class="text-center text-primary font-weight-bold">
+              Current Score: 
+              <span class="timer text-light bg-primary p-1">00</span>
+            </p>
+          </div>
+          <div class="temporary">
+            <button id="back-btn" class="btn btn-primary btn-block btn-lg">
+              Back to Start
+            </button>
+          </div>
+        </section>
 
-          <!-- Quiz Question -->
-          <section id="quiz-section" class="d-none">
-            <!-- Timer -->
-            <div class="timer">
-              <p class="text-center text-primary font-weight-bold">
-                Time Remaining: 
-                <span class="timer text-light bg-primary p-1">00</span>
-              </p>
-            </div>
-            <!-- Question -->
-            <h3 id="question" class="text-center font-weight-bold">
-              Which of the following is not a valid data type used in JavaScript?
-            </h3>
-            <hr class="my-4">
-            <!-- Answer Choices -->
-            <div class="answers text-center">
-              <button id="0" class="btn btn-outline-primary btn-block btn-lg">
-                Numbers
-              </button>
-              <button id="1" class="btn btn-outline-primary btn-block btn-lg">
-                Variables
-              </button>
-              <button id="2" class="btn btn-outline-primary btn-block btn-lg">
-                Booleans
-              </button>
-              <button id="3" class="btn btn-outline-primary btn-block btn-lg">
-                Strings
-              </button>
-            </div>
-            <hr class="my-4">
-            <!-- Score -->
-            <div class="timer">
-              <p class="text-center text-primary font-weight-bold">
-                Current Score: 
-                <span class="timer text-light bg-primary p-1">00</span>
-              </p>
-            </div>
-            <div class="temporary">
-              <button id="back-btn" class="btn btn-primary btn-block btn-lg">
-                Back to Start
-              </button>
-            </div>
-          </section>
-
-        </div>
       </div>
     </div>
   </main>
