@@ -32,8 +32,8 @@
       <!-- Centered Content Container -->
       <div class="container p-4 bg-light rounded">
 
-        <!-- Section: Page Header / Quiz Setup -->
-        <section id="intro-section" class="d-block text-center">
+        <!-- Section: Welcome + Quiz Instructions -->
+        <section id="instructions-section" class="d-block text-center">
           <h1 class="display-3 font-weight-bold">Code Quiz!</h1>
           <p class="lead">Ready to test your knowledge of JavaScript?</p>
           <hr class="w-75 my-4">
@@ -48,45 +48,29 @@
 
         <!-- Quiz Question: Display toggled by the Start Quiz button -->
         <section id="quiz-section" class="d-none">
-          <!-- Timer -->
-          <div class="timer">
+
+          <!-- Timer: Dynamically Updated -->
+          <div>
             <p class="text-center text-primary font-weight-bold">
               Time Remaining: 
-              <span class="timer text-light bg-primary p-1">00</span>
+              <span id="timer" class="text-light bg-primary p-1">00</span>
             </p>
           </div>
-          <!-- Question -->
-          <h3 id="question" class="text-center font-weight-bold">
-            Which of the following is not a valid data type used in JavaScript?
-          </h3>
+
+          <!-- Question: Dynamically Inserted -->
+          <h3 id="question" class="text-center font-weight-bold"></h3>
           <hr class="my-4">
-          <!-- Answer Choices -->
-          <div id="answer-container" class="text-center">
-            <button id="0" class="btn btn-outline-primary btn-block btn-lg">
-              Numbers
-            </button>
-            <button id="1" class="btn btn-outline-primary btn-block btn-lg">
-              Variables
-            </button>
-            <button id="2" class="btn btn-outline-primary btn-block btn-lg">
-              Booleans
-            </button>
-            <button id="3" class="btn btn-outline-primary btn-block btn-lg">
-              Strings
-            </button>
-          </div>
+
+          <!-- Answer Choices: Dynamically Inserted -->
+          <div id="answer-container" class="text-center"></div>
           <hr class="my-4">
-          <!-- Score -->
-          <div class="timer">
+
+          <!-- Score: Dynamically Updated -->
+          <div>
             <p class="text-center text-primary font-weight-bold">
               Current Score: 
-              <span class="timer text-light bg-primary p-1">00</span>
+              <span id="score" class="timer text-light bg-primary p-1">00</span>
             </p>
-          </div>
-          <div class="temporary">
-            <button id="back-btn" class="btn btn-primary btn-block btn-lg">
-              Back to Start
-            </button>
           </div>
         </section>
 
