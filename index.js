@@ -52,31 +52,54 @@ var quizData = [
 ]
 
 // UI Vars
+var intrustionsPageEl = document.getElementById("instructions-section");
+var quizPageEl = document.getElementById("quiz-section");
 var answersEl = document.getElementById("answer-container");
 var questionEl = document.getElementById("question");
 var scoreEl = document.getElementById("score");
 var timerEl = document.getElementById("timer");
-var startBtnEl = document.getElementById("start-btn");
+var startBtnEl = document.getElementById("start-quiz");
 
 // Global Vars
 var currentQuestion = 0;
+var seconds = 60;
 
 // Render UI
 function renderQuestion(quizData) {
 
+  // Get current question and answer array from quiz data
   var question = quizData[currentQuestion].question;
   var answers = quizData[currentQuestion].answers;
+
+  // Init output variable
   var output = "";
 
+  // Inject question into question field on page
   questionEl.textContent = question;
 
+  // Loop through answers and create an answer button for each
   answers.forEach(function(answer, index) {
     output += `
-      <button id="${index}" class="btn btn-outline-primary btn-block btn-lg">
+      <button id="${index}" class="btn btn-outline-primary btn-block btn-lg answer">
         ${answer}
       </button>
     `;
   });
   
+  // Insert the newly created answer buttons into the answer container
   answersEl.innerHTML = output;
 }
+
+// Start Quiz
+function takeQuiz() {
+
+  // Toggle from instructions page to quiz page
+  intrustionsPageEl.classList.replace("d-block", "d-none");
+  quizPageEl.classList.replace("d-none", "d-block");
+
+  // Render first quiz question into the UI
+  renderQuestion(quizData);
+}
+
+// Event Listener: Start Quiz Button
+startBtnEl.addEventListener("click", takeQuiz);
