@@ -67,10 +67,10 @@
           <hr class="my-4">
 
           <!-- Score: Dynamically Updated -->
-          <div>
+          <div id="score-container">
             <p class="text-center text-primary font-weight-bold">
               Current Score: 
-              <span id="score" class="timer text-light bg-primary p-1">00</span>
+              <span id="score" class="timer text-light bg-primary p-1">0</span>
             </p>
           </div>
         </section>
@@ -79,10 +79,10 @@
         <section id="high-score" class="d-none text-center">
 
           <!-- Display Final Score -->
-          <h1 class="display-3 font-weight-bold">Nice Job!</h1>
+          <h1 class="display-3 font-weight-bold">How did we do?</h1>
           <h3>
             Your Final Score: 
-            <span id="final-score" class="text-primary">100%</span>
+            <span id="final-score" class="text-primary"></span>
           </h3>
           <p class="lead mb-3">Go ahead! Put yourself on the learderboard!</p>
           <hr class="my-4">
@@ -102,17 +102,14 @@
 
           <!-- High Score Leaderboard -->
           <div id="leaderboard" class="d-none">
-            <ul class="list-group w-75 mx-auto mb-4">
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                JKR
+            <ul id="high-scores" class="list-group w-75 mx-auto mb-4">
+              <li class="list-group-item d-flex justify-content-between align-items-center">JKR
                 <span class="badge badge-primary badge-pill p-2">100%</span>
               </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                DJM
+              <li class="list-group-item d-flex justify-content-between align-items-center">DJM
                 <span class="badge badge-primary badge-pill p-2">80%</span>
               </li>
-              <li class="list-group-item d-flex justify-content-between align-items-center">
-                AKR
+              <li class="list-group-item d-flex justify-content-between align-items-center">AKR
                 <span class="badge badge-primary badge-pill p-2">40%</span>
               </li>
             </ul>
