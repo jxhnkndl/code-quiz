@@ -22,7 +22,8 @@ var clearBtnEl = document.getElementById("clear-btn");
 var index = 0;
 var score = 0;
 var totalQuestions = 5;
-var seconds = 20;
+var seconds = 60;
+var penalty = 10;
 var interval;
 
 
@@ -141,7 +142,7 @@ function checkAnswer(event) {
     showAlert("alert alert-success text-center", "Nice job!");
 
   } else {
-    seconds = seconds - 10;
+    seconds = seconds - penalty;
     showAlert("alert alert-primary text-center", "Whoops! Incorrect.");
   }
 }
@@ -174,7 +175,7 @@ function runTimer() {
 // Stop Timer
 function stopTimer() {
   clearInterval(interval);
-  seconds = 60;
+  // seconds = 60;
 }
 
 
@@ -183,6 +184,9 @@ function startQuiz() {
 
   // Toggle from instructions page to quiz page
   toggleSection(landingPageEl, quizPageEl);
+
+  // Clear existing alerts
+  clearAlert();
 
   // Render first quiz question into the UI
   renderQuestion(quizData);
@@ -198,7 +202,7 @@ function quizOver() {
   // Stop timer
   stopTimer();
 
-  // Update Final Score Percentage:
+  // Calculate and Render Final Score Percentage:
   finalScoreEl.textContent = calculateScorePercent() + "%";
 
   // Toggle from quiz page to leaderboard page
@@ -234,18 +238,22 @@ function clearLeaderboard() {
 // Restart Quiz
 function restartQuiz() {
 
-  // Toggle from score page back to landing page
-  toggleSection(scorePageEl, landingPageEl);
-
   // Reset quiz variables
   index = 0;
   score = 0;
   seconds = 60;
   interval;
 
+  console.log(index, score, seconds, interval);
+
   // Reset UI
-  scoreEl = score;
-  timerEl = seconds;
+  scoreEl.textContent = score;
+  timerEl.textContent = seconds;
+
+  console.log(scoreEl, timerEl);
+
+  // Toggle from score page back to landing page
+  toggleSection(scorePageEl, landingPageEl);
 }
 
 
