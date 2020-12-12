@@ -5,6 +5,7 @@ var scorePageEl = document.getElementById("high-score");
 var leaderboardEl = document.getElementById("leaderboard");
 var answersEl = document.getElementById("answer-container");
 var questionEl = document.getElementById("question");
+var scoreContainerEl = document.getElementById("score-container");
 var scoreEl = document.getElementById("score");
 var timerEl = document.getElementById("timer");
 var formEl = document.getElementById("form");
@@ -48,9 +49,36 @@ function renderQuestion(quizData) {
 }
 
 
+// Render Score
+function renderScore() {
+  scoreEl.textContent = score;
+}
+
+
 // Show Alert
-function showAlert() {
-  return;
+function showAlert(classes, message) {
+  
+  // Clear existing alerts
+  clearAlert();
+
+  // Create new alert
+  var alertDiv = document.createElement("div");
+  alertDiv.className = classes;
+  alertDiv.textContent = message;
+
+  // Append new alert to page
+  quizPageEl.insertBefore(alertDiv, scoreContainerEl);
+}
+
+
+// Clear Alert
+function clearAlert() {
+
+  var currentAlert = document.querySelector('.alert');
+
+  if (currentAlert) {
+    currentAlert.remove();
+  }
 }
 
 
@@ -84,10 +112,12 @@ function checkAnswer(event) {
   // Compare answers to determine whether user's answer is correct or not
   if (userAnswer === correctAnswer) {
     score++;
-    showAlert();
+    renderScore();
+    showAlert("alert alert-success text-center", "Nice job!");
+
   } else {
     seconds = seconds - 10;
-    showAlert();
+    showAlert("alert alert-primary text-center", "Whoops! Incorrect.");
   }
 }
 
@@ -98,23 +128,25 @@ function runTimer() {
   // Init timer
   timerEl.textContent = seconds;
 
-  // Check to ensure there are still seconds remaining
+  // Manage the operation of the timer running and stopping
   if (seconds > 0) {
-
-    // Set 1 second interval
     interval = setInterval(function() {
-
-      // If there is no time left, stop the timer
       if (seconds === 0) {
-        clearInterval(interval);
-      } 
-      // Otherwise, decrement the seconds and update the UI
-      else {
+        stopTimer();
+
+      } else {
         seconds--;
         timerEl.textContent = seconds;
       }
     }, 1000);
   } 
+}
+
+
+// Stop Timer
+function stopTimer() {
+  clearInterval(interval);
+  seconds = 60;
 }
 
 
