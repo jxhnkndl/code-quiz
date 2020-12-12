@@ -41,7 +41,7 @@ var quizData = [
     correctIndex: 0
   },
   {
-    question: "What is the object that allows JavaScript to access, interact with, and manipulate elements in an HTML document in the browser?",
+    question: "What object allows JavaScript to access, interact with, and manipulate elements in an HTML document in the browser?",
     answers: [
       "Node.js",
       "DOM",
