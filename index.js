@@ -49,7 +49,7 @@ function renderQuestion(quizData) {
   // Inject question into question field on page
   questionEl.textContent = question;
 
-  // Loop through answers array
+  // Loop through answers array and create an answer button for each
   answers.forEach(function(answer, index) {
 
     // Generate buttons for each answer
@@ -64,27 +64,24 @@ function renderQuestion(quizData) {
 }
 
 // Show Alert: Quiz Section
-function showAlert(classes, message, parent, before) {
+function showAlert(classes, message) {
   
   // Clear existing alerts
   clearAlert();
 
-  // Create new alert element
+  // Create new alert
   var alertDiv = document.createElement("div");
   alertDiv.className = classes;
   alertDiv.textContent = message;
 
   // Append new alert to page
-  parent.insertBefore(alertDiv, before);
+  quizPageEl.insertBefore(alertDiv, scoreContainerEl);
 }
 
 // Clear Alert: Quiz Section
 function clearAlert() {
-
-  // Query for existing alert
   var currentAlert = document.querySelector('.alert');
 
-  // If there is one, remove it
   if (currentAlert) {
     currentAlert.remove();
   }
@@ -92,15 +89,12 @@ function clearAlert() {
 
 // Render Score: Quiz Section
 function renderScore() {
-
-  // Update UI with updated user score
   scoreEl.textContent = score;
 }
 
 // Render Leaderboard: Leaderboard Section
 function renderLeaderboard() {
 
-  // Get user's inputted initials and score
   var initials = initialsEl.value;
   var percentScore = calculateScorePercent();
 
@@ -115,15 +109,7 @@ function renderLeaderboard() {
   li.appendChild(badge);
 
   highScoresEl.prepend(li);
-}
 
-// Post Score: Leaderboard Section
-function postScore() {
-
-  // Add Initials + High Score to Leaderboard
-  renderLeaderboard();
-
-  // Toggle internal section from form to leaderboard
   toggleSection(formEl, leaderboardEl);
 }
 
@@ -173,20 +159,11 @@ function checkAnswer(event) {
   if (userAnswer === correctAnswer) {
     score++;
     renderScore();
-    showAlert(
-      "alert alert-success text-center", 
-      "Nice job!", 
-      quizPageEl, 
-      scoreContainerEl
-    );
+    showAlert("alert alert-success text-center", "Nice job!");
 
   } else {
     seconds = seconds - penalty;
-    showAlert(
-      "alert alert-primary text-center", 
-      "Whoops! Incorrect.",
-      quizPageEl,
-      scoreContainerEl);
+    showAlert("alert alert-primary text-center", "Whoops! Incorrect.");
   }
 }
 
@@ -213,7 +190,7 @@ function runTimer() {
     }, 1000);
 
   } else {
-    stopTimer();
+    quizOver();
   }
 }
 
@@ -291,8 +268,8 @@ function toggleSection(prev, next) {
 }
 
 
-/* EVENT LISTENERS: All event listeners for
-all sections of the application. */
+/* EVENT LISTENERS: All event listeners for all sections of 
+the application. */
 
 // Event Listener: Start Quiz Button
 startBtnEl.addEventListener("click", startQuiz);
@@ -307,7 +284,7 @@ scoreBtnEl.addEventListener("click", function(event) {
   event.preventDefault();
 
   // Post score to leaderboard
-  postScore();
+  renderLeaderboard();
 });
 
 // Event Listener: Clear Scores
