@@ -1,57 +1,3 @@
-// Quiz Question Data
-var quizData = [
-  {
-    question: "Which of the following is not a valid data type in JavaScript?",
-    answers: [
-      "Numbers",
-      "Booleans",
-      "Variables",
-      "Strings"
-    ],
-    correctIndex: 2
-  }, 
-  {
-    question: "What is the correct term for a discrete, reusable block of code designed to accomplish a specific task?",
-    answers: [
-      "Conditional",
-      "Function",
-      "Prompt",
-      "Event"
-    ],
-    correctIndex: 1
-  },
-  {
-    question: "Which of the following could best be described as an indexed collection of elements?",
-    answers: [
-      "List",
-      "Batch",
-      "Object",
-      "Array"
-    ],
-    correctIndex: 3
-  },
-  {
-    question: "Which of the following is not a valid type JavaScript event?",
-    answers: [
-      "swipe",
-      "click",
-      "submit",
-      "keyup"
-    ],
-    correctIndex: 0
-  },
-  {
-    question: "What is the object that allows JavaScript to access, interact with, and manipulate elements in an HTML document in the browser?",
-    answers: [
-      "Node.js",
-      "DOM",
-      "querySelector",
-      "jQuery"
-    ]
-  }
-]
-
-
 // UI Vars
 var landingPageEl = document.getElementById("landing-section");
 var quizPageEl = document.getElementById("quiz-section");
@@ -70,7 +16,8 @@ var clearBtnEl = document.getElementById("clear-btn");
 
 // Global Vars
 var currentQuestion = 0;
-var seconds = 60;
+var seconds = 20;
+var interval;
 
 
 // Render Question in UI
@@ -100,14 +47,43 @@ function renderQuestion(quizData) {
 }
 
 
+// Start timer
+function runTimer() {
+
+  // Init timer
+  timerEl.textContent = seconds;
+
+  // Check to ensure there are still seconds remaining
+  if (seconds > 0) {
+
+    // Set 1 second interval
+    interval = setInterval(function() {
+
+      // If there is no time left, stop the timer
+      if (seconds === 0) {
+        clearInterval(interval);
+      } 
+      // Otherwise, decrement the seconds and update the UI
+      else {
+        seconds--;
+        timerEl.textContent = seconds;
+      }
+    }, 1000);
+  } 
+}
+
+
 // Start Quiz
-function takeQuiz() {
+function startQuiz() {
 
   // Toggle from instructions page to quiz page
   toggleSection(landingPageEl, quizPageEl);
 
   // Render first quiz question into the UI
   renderQuestion(quizData);
+
+  // Start timer
+  runTimer();
 }
 
 
@@ -123,7 +99,6 @@ function postScore() {
 
   // Toggle internal section from form to leaderboard
   toggleSection(formEl, leaderboardEl);
-
 }
 
 
@@ -135,7 +110,6 @@ function restartQuiz() {
 
   // Reset Current Question
   currentQuestion = 0;
-
 }
 
 
@@ -146,8 +120,13 @@ function toggleSection(prev, next) {
 }
 
 
+
+////////////////////////////////////////////////////
+
+
+
 // Event Listener: Start Quiz Button
-startBtnEl.addEventListener("click", takeQuiz);
+startBtnEl.addEventListener("click", startQuiz);
 
 
 // Event Listener: Answer Buttons
