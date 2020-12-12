@@ -29,27 +29,28 @@ var interval;
 // Render Question in UI
 function renderQuestion(quizData) {
 
-  // Get current question and answer array from quiz data
+  // Clear existing answers
+  answersEl.innerHTML = "";
+
+  // Get current question and answers from quiz data array
   var question = quizData[index].question;
   var answers = quizData[index].answers;
-
-  // Init output variable
-  var output = "";
 
   // Inject question into question field on page
   questionEl.textContent = question;
 
-  // Loop through answers and create an answer button for each
+  // Loop through answers array and create an answer button for each
   answers.forEach(function(answer, index) {
-    output += `
-      <button id="${index}" class="btn btn-primary btn-block btn-lg answer">
-        ${answer}
-      </button>
-    `;
+
+    // Generate buttons for each answer
+    var button = document.createElement("button");
+    button.setAttribute("id", index);
+    button.className = "btn btn-primary btn-block btn-lg answer";
+    button.textContent = answer;
+
+    // Append answer buttons to answer container
+    answersEl.appendChild(button);
   });
-  
-  // Insert the newly created answer buttons into the answer container
-  answersEl.innerHTML = output;
 }
 
 
@@ -100,7 +101,6 @@ function renderLeaderboard() {
 
   li.insertAdjacentText("afterbegin", initials);
   li.appendChild(badge);
-  // li.textContent = initials;
 
   highScoresEl.prepend(li);
 }
@@ -164,7 +164,10 @@ function runTimer() {
         timerEl.textContent = seconds;
       }
     }, 1000);
-  } 
+
+  } else {
+    stopTimer();
+  }
 }
 
 
@@ -208,13 +211,23 @@ function calculateScorePercent() {
   return (score / totalQuestions) * 100;
 }
 
+
 // Post Score
 function postScore() {
 
+  // Add Initials + High Score to Leaderboard
   renderLeaderboard();
 
   // Toggle internal section from form to leaderboard
   toggleSection(formEl, leaderboardEl);
+}
+
+
+// Clear Leaderboard
+function clearLeaderboard() {
+
+  // Clear out all high score list items from the leaderboard
+  highScoresEl.innerHTML = "";
 }
 
 
@@ -263,6 +276,9 @@ scoreBtnEl.addEventListener("click", function(event) {
   // Post score to leaderboard
   postScore();
 });
+
+// Event Listener: Clear Scores
+clearBtnEl.addEventListener("click", clearLeaderboard);
 
 // Event Listener: Restart
 restartBtnEl.addEventListener("click", restartQuiz);
