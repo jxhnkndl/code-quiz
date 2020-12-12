@@ -1,3 +1,7 @@
+/* GLOBAL VARIABLES: Elements queried from the DOM and
+quiz logic variables that will need to be accessible 
+across scopes. */
+
 // UI Vars
 var landingPageEl = document.getElementById("landing-section");
 var quizPageEl = document.getElementById("quiz-section");
@@ -17,7 +21,6 @@ var scoreBtnEl = document.getElementById("post-score");
 var restartBtnEl = document.getElementById("restart-btn");
 var clearBtnEl = document.getElementById("clear-btn");
 
-
 // Global Quiz Vars
 var index = 0;
 var score = 0;
@@ -26,6 +29,12 @@ var seconds = 60;
 var penalty = 10;
 var interval;
 
+
+/* UI FUNCTIONS: These functions are all designed to manage how 
+data gets dynamically rendered onto the HTML document. These
+functions include logic to control how question, answer, score,
+alerts, and high score data get dynamically rendered into the 
+appropriate section's UI.  */
 
 // Render Question in UI
 function renderQuestion(quizData) {
@@ -40,7 +49,7 @@ function renderQuestion(quizData) {
   // Inject question into question field on page
   questionEl.textContent = question;
 
-  // Loop through answers array and create an answer button for each
+  // Loop through answers array
   answers.forEach(function(answer, index) {
 
     // Generate buttons for each answer
@@ -54,42 +63,44 @@ function renderQuestion(quizData) {
   });
 }
 
-
-// Render Score
-function renderScore() {
-  scoreEl.textContent = score;
-}
-
-
-// Show Alert
-function showAlert(classes, message) {
+// Show Alert: Quiz Section
+function showAlert(classes, message, parent, before) {
   
   // Clear existing alerts
   clearAlert();
 
-  // Create new alert
+  // Create new alert element
   var alertDiv = document.createElement("div");
   alertDiv.className = classes;
   alertDiv.textContent = message;
 
   // Append new alert to page
-  quizPageEl.insertBefore(alertDiv, scoreContainerEl);
+  parent.insertBefore(alertDiv, before);
 }
 
-
-// Clear Alert
+// Clear Alert: Quiz Section
 function clearAlert() {
+
+  // Query for existing alert
   var currentAlert = document.querySelector('.alert');
 
+  // If there is one, remove it
   if (currentAlert) {
     currentAlert.remove();
   }
 }
 
+// Render Score: Quiz Section
+function renderScore() {
 
-// Render Leaderboard
+  // Update UI with updated user score
+  scoreEl.textContent = score;
+}
+
+// Render Leaderboard: Leaderboard Section
 function renderLeaderboard() {
 
+  // Get user's inputted initials and score
   var initials = initialsEl.value;
   var percentScore = calculateScorePercent();
 
@@ -106,8 +117,32 @@ function renderLeaderboard() {
   highScoresEl.prepend(li);
 }
 
+// Post Score: Leaderboard Section
+function postScore() {
 
-// Submit Answer
+  // Add Initials + High Score to Leaderboard
+  renderLeaderboard();
+
+  // Toggle internal section from form to leaderboard
+  toggleSection(formEl, leaderboardEl);
+}
+
+// Clear Leaderboard: Leaderboard Section
+function clearLeaderboard() {
+
+  // Clear out all high score list items from the leaderboard
+  highScoresEl.innerHTML = "";
+}
+
+
+/* GRADING FUNCTIONS: These functions are designed to 
+control the grading of the quiz's questions, such as the
+submission of user answers, checking user answers against 
+the correct answer, and determining how to proceed after 
+each answer submission depending on the state of the user's 
+interaction with the quiz. */
+
+// Submit Answer: Quiz Page
 function submitAnswer(event) {
 
   // Check that an answer button is clicked
@@ -127,8 +162,7 @@ function submitAnswer(event) {
   }
 }
 
-
-// Check Answer
+// Check Answer: Quiz Section
 function checkAnswer(event) {
 
   // Get user answer and correct answer
@@ -139,16 +173,28 @@ function checkAnswer(event) {
   if (userAnswer === correctAnswer) {
     score++;
     renderScore();
-    showAlert("alert alert-success text-center", "Nice job!");
+    showAlert(
+      "alert alert-success text-center", 
+      "Nice job!", 
+      quizPageEl, 
+      scoreContainerEl
+    );
 
   } else {
     seconds = seconds - penalty;
-    showAlert("alert alert-primary text-center", "Whoops! Incorrect.");
+    showAlert(
+      "alert alert-primary text-center", 
+      "Whoops! Incorrect.",
+      quizPageEl,
+      scoreContainerEl);
   }
 }
 
 
-// Start timer
+/* TIMER FUNCTIONS: These functions control the operation of
+the quiz's timer. */
+
+// Start timer: Quiz Section
 function runTimer() {
 
   // Init timer
@@ -171,15 +217,18 @@ function runTimer() {
   }
 }
 
-
-// Stop Timer
+// Stop Timer: Quiz Section
 function stopTimer() {
   clearInterval(interval);
-  // seconds = 60;
 }
 
 
-// Start Quiz
+/* QUIZ FUNCTIONS: These functions control what
+happens when a user starts the quiz, finishes 
+the quiz, or restarts the quiz again at the end
+of the process. */
+
+// Start Quiz: Landing -> Quiz Section
 function startQuiz() {
 
   // Toggle from instructions page to quiz page
@@ -195,8 +244,7 @@ function startQuiz() {
   runTimer();
 }
 
-
-// End Quiz
+// End Quiz: Quiz -> High Score Section
 function quizOver() {
 
   // Stop timer
@@ -209,33 +257,7 @@ function quizOver() {
   toggleSection(quizPageEl, scorePageEl);
 }
 
-
-// Calculate Score as a Percent
-function calculateScorePercent() {
-  return (score / totalQuestions) * 100;
-}
-
-
-// Post Score
-function postScore() {
-
-  // Add Initials + High Score to Leaderboard
-  renderLeaderboard();
-
-  // Toggle internal section from form to leaderboard
-  toggleSection(formEl, leaderboardEl);
-}
-
-
-// Clear Leaderboard
-function clearLeaderboard() {
-
-  // Clear out all high score list items from the leaderboard
-  highScoresEl.innerHTML = "";
-}
-
-
-// Restart Quiz
+// Restart Quiz: High Score Section -> Landing Section
 function restartQuiz() {
 
   // Reset quiz variables
@@ -244,30 +266,33 @@ function restartQuiz() {
   seconds = 60;
   interval;
 
-  console.log(index, score, seconds, interval);
-
   // Reset UI
   scoreEl.textContent = score;
   timerEl.textContent = seconds;
-
-  console.log(scoreEl, timerEl);
 
   // Toggle from score page back to landing page
   toggleSection(scorePageEl, landingPageEl);
 }
 
 
-// Toggle Sections
+/* HELPER FUNCTIONS: These are small functions designed
+to minimize the need for repetitive code that is required
+in multiple contexts and scopes. */
+
+// Calculate Score as a Percent
+function calculateScorePercent() {
+  return (score / totalQuestions) * 100;
+}
+
+// Toggle Section Display
 function toggleSection(prev, next) {
   prev.classList.replace("d-block", "d-none");
   next.classList.replace("d-none", "d-block");
 }
 
 
-
-////////////////////////////////////////////////////
-
-
+/* EVENT LISTENERS: All event listeners for
+all sections of the application. */
 
 // Event Listener: Start Quiz Button
 startBtnEl.addEventListener("click", startQuiz);
