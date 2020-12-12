@@ -14,8 +14,9 @@ var restartBtnEl = document.getElementById("restart-btn");
 var clearBtnEl = document.getElementById("clear-btn");
 
 
-// Global Vars
-var currentQuestion = 0;
+// Global Quiz Vars
+var index = 0;
+var score = 0;
 var seconds = 20;
 var interval;
 
@@ -24,8 +25,8 @@ var interval;
 function renderQuestion(quizData) {
 
   // Get current question and answer array from quiz data
-  var question = quizData[currentQuestion].question;
-  var answers = quizData[currentQuestion].answers;
+  var question = quizData[index].question;
+  var answers = quizData[index].answers;
 
   // Init output variable
   var output = "";
@@ -44,6 +45,50 @@ function renderQuestion(quizData) {
   
   // Insert the newly created answer buttons into the answer container
   answersEl.innerHTML = output;
+}
+
+
+// Show Alert
+function showAlert() {
+  return;
+}
+
+
+// Submit Answer
+function submitAnswer(event) {
+
+  // Check that an answer button is clicked
+  if (event.target.classList.contains("answer")) {
+
+    // Check whether user chose correct answer
+    checkAnswer(event);
+
+    // Check that there are questions left to load
+    if (index < quizData.length - 1) {
+      index++;
+      renderQuestion(quizData);
+    } else {
+      quizOver();
+    }
+  }
+}
+
+
+// Check Answer
+function checkAnswer(event) {
+
+  // Get user answer and correct answer
+  var userAnswer = event.target.id * 1;
+  var correctAnswer = quizData[index].correctIndex;
+
+  // Compare answers to determine whether user's answer is correct or not
+  if (userAnswer === correctAnswer) {
+    score++;
+    showAlert();
+  } else {
+    seconds = seconds - 10;
+    showAlert();
+  }
 }
 
 
@@ -94,6 +139,7 @@ function quizOver() {
   toggleSection(quizPageEl, scorePageEl);
 }
 
+
 // Post Score
 function postScore() {
 
@@ -109,7 +155,7 @@ function restartQuiz() {
   toggleSection(scorePageEl, landingPageEl);
 
   // Reset Current Question
-  currentQuestion = 0;
+  index = 0;
 }
 
 
@@ -130,33 +176,14 @@ startBtnEl.addEventListener("click", startQuiz);
 
 
 // Event Listener: Answer Buttons
-answersEl.addEventListener("click", function(e) {
-
-  // Check that an answer button is clicked
-  if (e.target.classList.contains("answer")) {
-
-    // Check that there are questions left to load
-    if (currentQuestion < quizData.length - 1) {
-
-      // Increment current question iterator
-      currentQuestion++;
-
-      // Render the next question
-      renderQuestion(quizData);
-    } else {
-
-      // End quiz
-      quizOver();
-    }
-  }
-});
+answersEl.addEventListener("click", submitAnswer);
 
 
 // Event Listener: Add High Score to Leaderboard
-scoreBtnEl.addEventListener("click", function(e) {
+scoreBtnEl.addEventListener("click", function(event) {
 
   // Prevent default submit behavior
-  e.preventDefault();
+  event.preventDefault();
 
   // Post score to leaderboard
   postScore();
