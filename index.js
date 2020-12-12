@@ -8,7 +8,10 @@ var questionEl = document.getElementById("question");
 var scoreContainerEl = document.getElementById("score-container");
 var scoreEl = document.getElementById("score");
 var timerEl = document.getElementById("timer");
+var finalScoreEl = document.getElementById("final-score");
 var formEl = document.getElementById("form");
+var initialsEl = document.getElementById("initials");
+var highScoresEl = document.getElementById("high-scores");
 var startBtnEl = document.getElementById("start-quiz");
 var scoreBtnEl = document.getElementById("post-score");
 var restartBtnEl = document.getElementById("restart-btn");
@@ -18,6 +21,7 @@ var clearBtnEl = document.getElementById("clear-btn");
 // Global Quiz Vars
 var index = 0;
 var score = 0;
+var totalQuestions = 5;
 var seconds = 20;
 var interval;
 
@@ -73,12 +77,32 @@ function showAlert(classes, message) {
 
 // Clear Alert
 function clearAlert() {
-
   var currentAlert = document.querySelector('.alert');
 
   if (currentAlert) {
     currentAlert.remove();
   }
+}
+
+
+// Render Leaderboard
+function renderLeaderboard() {
+
+  var initials = initialsEl.value;
+  var percentScore = calculateScorePercent();
+
+  var li = document.createElement("li");
+  li.className = "list-group-item d-flex justify-content-between align-items-center";
+  
+  var badge = document.createElement("span");
+  badge.className = "badge badge-primary badge-pill p-2";
+  badge.textContent = percentScore + "%";
+
+  li.insertAdjacentText("afterbegin", initials);
+  li.appendChild(badge);
+  // li.textContent = initials;
+
+  highScoresEl.prepend(li);
 }
 
 
@@ -95,6 +119,7 @@ function submitAnswer(event) {
     if (index < quizData.length - 1) {
       index++;
       renderQuestion(quizData);
+
     } else {
       quizOver();
     }
@@ -132,7 +157,7 @@ function runTimer() {
   if (seconds > 0) {
     interval = setInterval(function() {
       if (seconds === 0) {
-        stopTimer();
+        quizOver();
 
       } else {
         seconds--;
@@ -167,13 +192,26 @@ function startQuiz() {
 // End Quiz
 function quizOver() {
 
+  // Stop timer
+  stopTimer();
+
+  // Update Final Score Percentage:
+  finalScoreEl.textContent = calculateScorePercent() + "%";
+
   // Toggle from quiz page to leaderboard page
   toggleSection(quizPageEl, scorePageEl);
 }
 
 
+// Calculate Score as a Percent
+function calculateScorePercent() {
+  return (score / totalQuestions) * 100;
+}
+
 // Post Score
 function postScore() {
+
+  renderLeaderboard();
 
   // Toggle internal section from form to leaderboard
   toggleSection(formEl, leaderboardEl);
@@ -186,8 +224,15 @@ function restartQuiz() {
   // Toggle from score page back to landing page
   toggleSection(scorePageEl, landingPageEl);
 
-  // Reset Current Question
+  // Reset quiz variables
   index = 0;
+  score = 0;
+  seconds = 60;
+  interval;
+
+  // Reset UI
+  scoreEl = score;
+  timerEl = seconds;
 }
 
 
@@ -206,10 +251,8 @@ function toggleSection(prev, next) {
 // Event Listener: Start Quiz Button
 startBtnEl.addEventListener("click", startQuiz);
 
-
 // Event Listener: Answer Buttons
 answersEl.addEventListener("click", submitAnswer);
-
 
 // Event Listener: Add High Score to Leaderboard
 scoreBtnEl.addEventListener("click", function(event) {
@@ -219,9 +262,7 @@ scoreBtnEl.addEventListener("click", function(event) {
 
   // Post score to leaderboard
   postScore();
-
 });
-
 
 // Event Listener: Restart
 restartBtnEl.addEventListener("click", restartQuiz);
