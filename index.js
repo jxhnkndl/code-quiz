@@ -64,7 +64,7 @@ function renderQuestion(quizData) {
 }
 
 // Show Alert: Quiz Section
-function showAlert(classes, message) {
+function showAlert(classes, message, parent, before) {
   
   // Clear existing alerts
   clearAlert();
@@ -75,7 +75,7 @@ function showAlert(classes, message) {
   alertDiv.textContent = message;
 
   // Append new alert to page
-  quizPageEl.insertBefore(alertDiv, scoreContainerEl);
+  parent.insertBefore(alertDiv, before);
 }
 
 // Clear Alert: Quiz Section
@@ -93,23 +93,32 @@ function renderScore() {
 }
 
 // Render Leaderboard: Leaderboard Section
-function renderLeaderboard() {
+function renderLeaderboard(user) {
 
-  var initials = initialsEl.value;
+  // Clear existing validation alert
+  clearAlert();
+
+  // Capture user's initials and final score
+  var initials = user;
   var percentScore = calculateScorePercent();
 
+  // Generate list item for user's high score on the leaderboard
   var li = document.createElement("li");
   li.className = "list-group-item d-flex justify-content-between align-items-center";
   
+  // Genereate badge element to wrap the score percentage
   var badge = document.createElement("span");
   badge.className = "badge badge-primary badge-pill p-2";
   badge.textContent = percentScore + "%";
 
+  // Insert user's initials and badge score into the list item
   li.insertAdjacentText("afterbegin", initials);
   li.appendChild(badge);
 
+  // Add the new entry to the top of the leaderboard
   highScoresEl.prepend(li);
 
+  // Switch from form view to leaderboard view
   toggleSection(formEl, leaderboardEl);
 }
 
@@ -157,13 +166,26 @@ function checkAnswer(event) {
 
   // Compare answers to determine whether user's answer is correct or not
   if (userAnswer === correctAnswer) {
+
+    // If so, increment and render the score and alert the user
     score++;
     renderScore();
-    showAlert("alert alert-success text-center", "Nice job!");
-
+    showAlert(
+      "alert alert-success text-center", 
+      "Nice job!",
+      quizPageEl,
+      scoreContainerEl
+    );
   } else {
+
+    // If not, impose the time penalty and alert the user!
     seconds = seconds - penalty;
-    showAlert("alert alert-primary text-center", "Whoops! Incorrect.");
+    showAlert(
+      "alert alert-primary text-center", 
+      "Incorrect. 10 second penalty incurred.",
+      quizPageEl,
+      scoreContainerEl
+    );
   }
 }
 
@@ -283,8 +305,22 @@ scoreBtnEl.addEventListener("click", function(event) {
   // Prevent default submit behavior
   event.preventDefault();
 
-  // Post score to leaderboard
-  renderLeaderboard();
+  if (initialsEl.value === "") {
+    showAlert(
+      "alert alert-primary",
+      "Oops! We're going to need your initials to put you on the board!",
+      scorePageEl,
+      formEl
+    );
+
+    setTimeout(function() {
+      clearAlert();
+    }, 2000);
+
+  } else {
+    var initials = initialsEl.value;
+    renderLeaderboard(initials);
+  }
 });
 
 // Event Listener: Clear Scores
