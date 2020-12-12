@@ -47,6 +47,7 @@ var quizData = [
       "DOM",
       "querySelector",
       "jQuery"
-    ]
+    ],
+    correctIndex: 1
   }
 ];
