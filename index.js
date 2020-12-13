@@ -28,6 +28,7 @@ var totalQuestions = 5;
 var seconds = 60;
 var penalty = 10;
 var interval;
+var users = [];
 
 
 /* UI FUNCTIONS: These functions are all designed to manage how 
@@ -93,14 +94,14 @@ function renderScore() {
 }
 
 // Render Leaderboard: Leaderboard Section
-function renderLeaderboard(user) {
+function renderLeaderboard(user, percentScore) {
 
   // Clear existing validation alert
   clearAlert();
 
   // Capture user's initials and final score
   var initials = user;
-  var percentScore = calculateScorePercent();
+  var percentScore = percentScore;
 
   // Generate list item for user's high score on the leaderboard
   var li = document.createElement("li");
@@ -117,9 +118,6 @@ function renderLeaderboard(user) {
 
   // Add the new entry to the top of the leaderboard
   highScoresEl.prepend(li);
-
-  // Switch from form view to leaderboard view
-  toggleSection(formEl, leaderboardEl);
 }
 
 // Clear Leaderboard: Leaderboard Section
@@ -127,6 +125,49 @@ function clearLeaderboard() {
 
   // Clear out all high score list items from the leaderboard
   highScoresEl.innerHTML = "";
+
+  // Clear out local storage along with clearing UI
+  localStorage.clear();
+}
+
+// Render Data from Local Storage into UI: Leaderboard Section
+function renderHighScores() {
+
+  // Check for users already in local storage
+  if (localStorage.getItem("users") === null) {
+    users = [];
+  } else {
+    users = JSON.parse(localStorage.getItem("users"));
+  }
+
+  // Loop through existing scores and render to the UI
+  users.forEach((user) => {
+    renderLeaderboard(user.initials, user.score);
+  });
+}
+
+
+// Save Data into Local Storage: Leaderboard Section
+function saveHighScore(initials, score) {
+
+  // Create user object
+  var user = {
+    initials,
+    score
+  }
+
+  // Check for users already in local storage
+  if (localStorage.getItem("users") === null) {
+    users = [];
+  } else {
+    users = JSON.parse(localStorage.getItem("users"));
+  }
+
+  // Add the new user to the other saved users
+  users.push(user);
+
+  // Reset local storage
+  localStorage.setItem("users", JSON.stringify(users));
 }
 
 
@@ -257,7 +298,7 @@ function quizOver() {
 }
 
 // Restart Quiz: High Score Section -> Landing Section
-function restartQuiz() {
+function resetQuiz() {
 
   // Reset quiz variables
   index = 0;
@@ -268,6 +309,12 @@ function restartQuiz() {
   // Reset UI
   scoreEl.textContent = score;
   timerEl.textContent = seconds;
+
+  // Reset High Score Form
+  initialsEl.value = "";
+
+  // Toggle display from leaderboard back to form
+  toggleSection(leaderboardEl, formEl);
 
   // Toggle from score page back to landing page
   toggleSection(scorePageEl, landingPageEl);
@@ -292,6 +339,9 @@ function toggleSection(prev, next) {
 
 /* EVENT LISTENERS: All event listeners for all sections of 
 the application. */
+
+// Event Listener: DOM Content Loaded
+document.addEventListener("DOMContentLoaded", renderHighScores);
 
 // Event Listener: Start Quiz Button
 startBtnEl.addEventListener("click", startQuiz);
@@ -319,7 +369,12 @@ scoreBtnEl.addEventListener("click", function(event) {
 
   } else {
     var initials = initialsEl.value;
-    renderLeaderboard(initials);
+    var percentScore = calculateScorePercent();
+
+    renderLeaderboard(initials, percentScore);
+    saveHighScore(initials, percentScore);
+
+    toggleSection(formEl, leaderboardEl);
   }
 });
 
@@ -327,4 +382,4 @@ scoreBtnEl.addEventListener("click", function(event) {
 clearBtnEl.addEventListener("click", clearLeaderboard);
 
 // Event Listener: Restart
-restartBtnEl.addEventListener("click", restartQuiz);
+restartBtnEl.addEventListener("click", resetQuiz);
