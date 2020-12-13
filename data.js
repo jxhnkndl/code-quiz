@@ -1,4 +1,5 @@
-// Quiz Question Data
+/* Data Array: By separating the quiz data from the quiz logic itself, the application is more scalable. Making a quiz longer could be accomplished by adding additional questions to this array. Alternatively, the infrastructure supporting this application could be used to power other quizzes about different topics by simply this quiz data array for a different one with different questions. */
+
 var quizData = [
   {
     question: "Which of the following is not a valid data type in JavaScript?",
