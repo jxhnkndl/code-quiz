@@ -32,15 +32,12 @@ var users = [];
 
 
 /* UI FUNCTIONS: These functions are all designed to manage how 
-data gets dynamically rendered onto the HTML document. These
-functions include logic to control how question, answer, score,
-alerts, and high score data get dynamically rendered into the 
-appropriate section's UI.  */
+data gets dynamically painted into the UI. */
 
 // Render Question in UI
 function renderQuestion(quizData) {
 
-  // Clear existing answers
+  // Clear existing answers from the UI
   answersEl.innerHTML = "";
 
   // Get current question and answers from quiz data array
@@ -50,16 +47,12 @@ function renderQuestion(quizData) {
   // Inject question into question field on page
   questionEl.textContent = question;
 
-  // Loop through answers array and create an answer button for each
+  // Create answer buttons for each answer and append them to the answer container
   answers.forEach(function(answer, index) {
-
-    // Generate buttons for each answer
     var button = document.createElement("button");
     button.setAttribute("id", index);
     button.className = "btn btn-primary btn-block btn-lg answer";
     button.textContent = answer;
-
-    // Append answer buttons to answer container
     answersEl.appendChild(button);
   });
 }
@@ -70,16 +63,20 @@ function showAlert(classes, message, parent, before) {
   // Clear existing alerts
   clearAlert();
 
-  // Create new alert
+  // Abort alert if an argument is missing to avoid causing UI problems
+  if (classes === undefined || message === undefined || 
+    parent === undefined || before === undefined) {
+    return;
+  }
+
+  // Create and render new alert
   var alertDiv = document.createElement("div");
   alertDiv.className = classes;
   alertDiv.textContent = message;
-
-  // Append new alert to page
   parent.insertBefore(alertDiv, before);
 }
 
-// Clear Alert: Quiz Section
+// Clear Alert
 function clearAlert() {
   var currentAlert = document.querySelector('.alert');
 
@@ -88,12 +85,12 @@ function clearAlert() {
   }
 }
 
-// Render Score: Quiz Section
+// Render Score
 function renderScore() {
   scoreEl.textContent = score;
 }
 
-// Render Leaderboard: Leaderboard Section
+// Render Leaderboard
 function renderLeaderboard(user, percentScore) {
 
   // Clear existing validation alert
@@ -103,34 +100,26 @@ function renderLeaderboard(user, percentScore) {
   var initials = user;
   var percentScore = percentScore;
 
-  // Generate list item for user's high score on the leaderboard
+  // Generate high score list item 
   var li = document.createElement("li");
   li.className = "list-group-item d-flex justify-content-between align-items-center";
-  
-  // Genereate badge element to wrap the score percentage
+
+  // Generate score badge
   var badge = document.createElement("span");
   badge.className = "badge badge-primary badge-pill p-2";
   badge.textContent = percentScore + "%";
 
-  // Insert user's initials and badge score into the list item
+  // Insert user data into the list item and prepend it to the leaderboard
   li.insertAdjacentText("afterbegin", initials);
   li.appendChild(badge);
-
-  // Add the new entry to the top of the leaderboard
   highScoresEl.prepend(li);
 }
 
-// Clear Leaderboard: Leaderboard Section
-function clearLeaderboard() {
 
-  // Clear out all high score list items from the leaderboard
-  highScoresEl.innerHTML = "";
+/* STORAGE FUNCTIONS: These functions are responsible for
+setting and getting leaderboard data from local storage. */
 
-  // Clear out local storage along with clearing UI
-  localStorage.clear();
-}
-
-// Render Data from Local Storage into UI: Leaderboard Section
+// Render Leaderboard Data from Local Storage into UI
 function renderHighScores() {
 
   // Check for users already in local storage
@@ -140,23 +129,19 @@ function renderHighScores() {
     users = JSON.parse(localStorage.getItem("users"));
   }
 
-  // Loop through existing scores and render to the UI
+  // Loop through stored scores and render to the leaderboard
   users.forEach((user) => {
     renderLeaderboard(user.initials, user.score);
   });
 }
 
-
-// Save Data into Local Storage: Leaderboard Section
+// Save User's High Score into Local Storage
 function saveHighScore(initials, score) {
 
   // Create user object
-  var user = {
-    initials,
-    score
-  }
+  var user = { initials, score }
 
-  // Check for users already in local storage
+  // Check for users in local storage
   if (localStorage.getItem("users") === null) {
     users = [];
   } else {
@@ -170,45 +155,46 @@ function saveHighScore(initials, score) {
   localStorage.setItem("users", JSON.stringify(users));
 }
 
+// Clear Leaderboard from UI and Local Storage
+function clearLeaderboard() {
+  highScoresEl.innerHTML = "";
+  localStorage.clear();
+}
+
 
 /* GRADING FUNCTIONS: These functions are designed to 
-control the grading of the quiz's questions, such as the
-submission of user answers, checking user answers against 
-the correct answer, and determining how to proceed after 
-each answer submission depending on the state of the user's 
-interaction with the quiz. */
+control the submission and checking of user answers. */
 
-// Submit Answer: Quiz Page
+// Submit Answer
 function submitAnswer(event) {
 
   // Check that an answer button is clicked
   if (event.target.classList.contains("answer")) {
 
-    // Check whether user chose correct answer
+    // Check if user's answer choice is correct
     checkAnswer(event);
 
-    // Check that there are questions left to load
+    // If there are questions left to load
     if (index < quizData.length - 1) {
       index++;
       renderQuestion(quizData);
-
-    } else {
+    } 
+    // If there aren't questions left to laod
+    else {
       quizOver();
     }
   }
 }
 
-// Check Answer: Quiz Section
+// Check Answer
 function checkAnswer(event) {
 
-  // Get user answer and correct answer
+  // Capture user's answer and correct answer
   var userAnswer = event.target.id * 1;
   var correctAnswer = quizData[index].correctIndex;
 
   // If user's answer is correct
   if (userAnswer === correctAnswer) {
-
-    // If so, increment and render the score and alert the user
     score++;
     renderScore();
     showAlert(
@@ -218,13 +204,11 @@ function checkAnswer(event) {
       scoreContainerEl
     );
   } 
-  // If user's answer is incorrect 
+  // If user's answer is incorrect
   else {
-
-    // Impose time penalty for incorrect answer
     seconds = seconds - penalty;
 
-    // If the answer is wrong and there are more than 10 seconds left
+    // If there are more than 10 seconds left
     if (seconds > 0) {
       showAlert(
         "alert alert-primary text-center", 
@@ -233,7 +217,7 @@ function checkAnswer(event) {
         scoreContainerEl
       );
     } 
-    // If the answer is wrong and there are less than 10 seconds on the clock
+    // If there are less than 10 seconds on the clock
     else {
       quizOver();
     }
@@ -244,30 +228,30 @@ function checkAnswer(event) {
 /* TIMER FUNCTIONS: These functions control the operation of
 the quiz's timer. */
 
-// Start timer: Quiz Section
+// Start timer
 function runTimer() {
 
   // Init timer
   timerEl.textContent = seconds;
 
-  // Manage the operation of the timer running and stopping
+  // If there are seconds left on the clock
   if (seconds > 0) {
     interval = setInterval(function() {
       if (seconds === 0) {
         quizOver();
-
       } else {
         seconds--;
         timerEl.textContent = seconds;
       }
     }, 1000);
-
-  } else {
+  } 
+  // If there are no seconds left on the clock
+  else {
     quizOver();
   }
 }
 
-// Stop Timer: Quiz Section
+// Stop Timer
 function stopTimer() {
   clearInterval(interval);
 }
@@ -276,38 +260,33 @@ function stopTimer() {
 /* QUIZ FUNCTIONS: These functions control what
 happens when a user starts the quiz, finishes 
 the quiz, or restarts the quiz again at the end
-of the process. */
+of the application cycle. */
 
-// Start Quiz: Landing -> Quiz Section
+// Start Quiz
 function startQuiz() {
 
   // Toggle from instructions page to quiz page
   toggleSection(landingPageEl, quizPageEl);
-
   // Clear existing alerts
   clearAlert();
-
   // Render first quiz question into the UI
   renderQuestion(quizData);
-
   // Start timer
   runTimer();
 }
 
-// End Quiz: Quiz -> High Score Section
+// End Quiz
 function quizOver() {
 
   // Stop timer
   stopTimer();
-
   // Calculate and Render Final Score Percentage:
   finalScoreEl.textContent = calculateScorePercent() + "%";
-
   // Toggle from quiz page to leaderboard page
   toggleSection(quizPageEl, scorePageEl);
 }
 
-// Restart Quiz: High Score Section -> Landing Section
+// Restart Quiz
 function resetQuiz() {
 
   // Reset quiz variables
@@ -319,36 +298,30 @@ function resetQuiz() {
   // Reset UI
   scoreEl.textContent = score;
   timerEl.textContent = seconds;
-
-  // Reset High Score Form
   initialsEl.value = "";
 
-  // Toggle display from leaderboard back to form
+  // Toggle sections
   toggleSection(leaderboardEl, formEl);
-
-  // Toggle from score page back to landing page
   toggleSection(scorePageEl, landingPageEl);
 }
 
 
-/* HELPER FUNCTIONS: These are small functions designed
-to minimize the need for repetitive code that is required
-in multiple contexts and scopes. */
+/* HELPER FUNCTIONS: Small, utilitarian functions designed
+to handle small but predictably repetitive tasks.  */
 
 // Calculate Score as a Percent
 function calculateScorePercent() {
   return (score / totalQuestions) * 100;
 }
 
-// Toggle Section Display
+// Toggle Sections
 function toggleSection(prev, next) {
   prev.classList.replace("d-block", "d-none");
   next.classList.replace("d-none", "d-block");
 }
 
 
-/* EVENT LISTENERS: All event listeners for all sections of 
-the application. */
+/* EVENT LISTENERS */
 
 // Event Listener: DOM Content Loaded
 document.addEventListener("DOMContentLoaded", renderHighScores);
@@ -365,6 +338,7 @@ scoreBtnEl.addEventListener("click", function(event) {
   // Prevent default submit behavior
   event.preventDefault();
 
+  // If the initials input does not pass validation
   if (initialsEl.value === "") {
     showAlert(
       "alert alert-primary",
@@ -372,18 +346,21 @@ scoreBtnEl.addEventListener("click", function(event) {
       scorePageEl,
       formEl
     );
-
     setTimeout(function() {
       clearAlert();
     }, 2000);
-
-  } else {
+  } 
+  // If the initials input does pass validation
+  else {
+    // Capture user data
     var initials = initialsEl.value;
     var percentScore = calculateScorePercent();
 
+    // Render the user's high score on the leaderboard and save it local storage
     renderLeaderboard(initials, percentScore);
     saveHighScore(initials, percentScore);
 
+    // Toggle sections
     toggleSection(formEl, leaderboardEl);
   }
 });
