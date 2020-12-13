@@ -1,0 +1,14 @@
+/* Media Query: The hover and active state of the buttons is
+pleasing on laptops and desktops. However, the hover and active
+states sometimes stick on mobile, detracting from the user 
+experience, especially given that a sticky active state on an
+answer button could lead the user to believe that's the correct
+choice. */
+
+@media only screen and (max-width: 992px) {
+  .btn-primary:hover,
+  .btn-primary:active {
+    background-color: #eb6864;
+    border-color: #eb6864;
+  }
+}
