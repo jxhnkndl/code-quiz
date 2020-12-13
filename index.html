@@ -35,13 +35,59 @@
 
         <!-- Section: Landing Page + Quiz Instructions -->
         <section id="landing-section" class="d-block text-center">
-          <h1 class="display-4 font-weight-bold">Code Quiz!</h1>
+          <h1 class="display-4 font-weight-bold">
+            <i class="fab fa-js-square d-block d-md-none text-primary"></i>
+            Code 
+            <i class="fab fa-js-square d-none d-md-inline text-primary"></i>
+            Quiz!
+          </h1>
           <p class="lead">Ready to test your knowledge of JavaScript?</p>
           <hr class="w-75 my-4">
-          <p class="mb-0">5 Questions</p>
+          <!-- <p class="mb-0">5 Questions</p>
           <p class="mb-0">60 Seconds</p>
           <p class="mb-0">Miss a Question?</p>
-          <p>5 Second Penalty!</p>
+          <p>10 Second Penalty!</p> -->
+          
+          <div class="row">
+
+            <!-- Card/Column 1 -->
+            <div class="col-md-4">
+              <div class="card text-white bg-primary mb-3 mx-auto">
+                <div class="card-body">
+                  <h4 class="display-4">
+                    <i class="far fa-question-circle"></i>
+                  </h4>
+                  <p class="card-text">5 quick questions designed to test your JavaScript knowledge.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card/Column 2 -->
+            <div class="col-md-4">
+              <div class="card text-white bg-primary mb-3 mx-auto">
+                <div class="card-body">
+                  <h4 class="display-4">
+                    <i class="far fa-clock"></i>
+                  </h4>
+                  <p class="card-text">60 seconds to finish, but don't get too comfortable because...</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- Card/Column 3 -->
+            <div class="col-md-4">
+              <div class="card text-white bg-primary mb-3 mx-auto">
+                <div class="card-body">
+                  <h4 class="display-4">
+                    <i class="far fa-times-circle"></i>
+                  </h4>
+                  <p class="card-text">10 second penalty for missed questions so answer carefully!</p>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
           <p class="lead">
             <a id="start-quiz" class="btn btn-primary btn-lg px-4 mt-3" role="button">Let's Do This!</a>
           </p>
