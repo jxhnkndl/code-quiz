@@ -205,7 +205,7 @@ function checkAnswer(event) {
   var userAnswer = event.target.id * 1;
   var correctAnswer = quizData[index].correctIndex;
 
-  // Compare answers to determine whether user's answer is correct or not
+  // If user's answer is correct
   if (userAnswer === correctAnswer) {
 
     // If so, increment and render the score and alert the user
@@ -217,19 +217,24 @@ function checkAnswer(event) {
       quizPageEl,
       scoreContainerEl
     );
-  } else {
+  } 
+  // If user's answer is incorrect 
+  else {
+
+    // Impose time penalty for incorrect answer
+    seconds = seconds - penalty;
 
     // If the answer is wrong and there are more than 10 seconds left
-    if (seconds > 10) {
-      seconds = seconds - penalty;
+    if (seconds > 0) {
       showAlert(
         "alert alert-primary text-center", 
         "Incorrect. 10 second penalty incurred.",
         quizPageEl,
         scoreContainerEl
       );
-    } else {
-      // If the answer is wrong and there are less than 10 seconds on the clock
+    } 
+    // If the answer is wrong and there are less than 10 seconds on the clock
+    else {
       quizOver();
     }
   }
