@@ -219,14 +219,19 @@ function checkAnswer(event) {
     );
   } else {
 
-    // If not, impose the time penalty and alert the user!
-    seconds = seconds - penalty;
-    showAlert(
-      "alert alert-primary text-center", 
-      "Incorrect. 10 second penalty incurred.",
-      quizPageEl,
-      scoreContainerEl
-    );
+    // If the answer is wrong and there are more than 10 seconds left
+    if (seconds > 10) {
+      seconds = seconds - penalty;
+      showAlert(
+        "alert alert-primary text-center", 
+        "Incorrect. 10 second penalty incurred.",
+        quizPageEl,
+        scoreContainerEl
+      );
+    } else {
+      // If the answer is wrong and there are less than 10 seconds on the clock
+      quizOver();
+    }
   }
 }
 
